@@ -42,13 +42,14 @@ class Node
 end
 
 class LinkedList
+  attr_accessor :head
+
   def initialize(val)
     @head = Node.new(val, nil)
   end
 
   def add(val)
     current = @head
-    # Navigate to the tail from the head
     while current.next
       current = current.next
     end
@@ -82,8 +83,8 @@ class LinkedList
   end
 end
 
-ll = LinkedList.new('a')
-ll.add('b')
-ll.add('c')
-ll.delete('b')
-puts ll.to_a.inspect
+# ll = LinkedList.new('a')
+# ll.add('b')
+# ll.add('c')
+# ll.delete('b')
+# puts ll.to_a.inspect
