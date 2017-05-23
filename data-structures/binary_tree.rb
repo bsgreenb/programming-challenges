@@ -1,6 +1,6 @@
 require_relative 'tree'
 
-class BinaryTreeNode
+class Node
   attr_accessor :value, :left_node, :right_node
 
   def initialize(val)
@@ -8,61 +8,65 @@ class BinaryTreeNode
     @left_node = nil
     @right_node = nil
   end
+
+  def add_value(val)
+    if val <= @value
+      next_node = @left_node
+    else
+      next_node = @right_node
+    end
+
+    if next_node
+      next_node.add_value(val)
+    else
+      new_node = Node.new(val)
+      if val <= @value
+        @left_node = new_node
+      else
+        @right_node = new_node
+      end
+    end
+  end
+
 end
 
 class BinaryTree
   attr_accessor :root
 
+  def initialize(val)
+    @root = Node.new(val)
+  end
+
   def add_value(val)
-    node = @root
-    if !@root
-      @root = BinaryTreeNode.new(val)
-      return
-    end
-
-
-    #TODO: would be cleaner with recursion
-    loop do
-      # Note that we went with <= on left
-      if (val <= node.value)
-        if node.left_node
-          node = node.left_node
-          break
-        else
-          node.left_node = BinaryTreeNode.new(val)
-        end
-      else # Right side
-        if node.right_node
-          node = node.right_node
-        else
-          node.right_node = BinaryTreeNode.new(val)
-          break
-        end
-      end
-    end
+    @root.add_value(val)
   end
 
-
-  # Get back to this and put on recursion thinking cap.  Let's visit recursion chapter maybe.  Basically need to know pattern for not having to build up in a sperate param.
-  # Recursion makes this nice
+  # In Order Traversal (From least to most)
   def in_order_traversal(node)
-    return nil unless node
-    nodes = []
-    nodes.push()
-    return [in_order_traversal(node.left_node)] + [node.value] + [in_order_traversal(node.right_node)]
+    return [] unless node
+    in_order_traversal(node.left_node) + [ node.value ] + in_order_traversal(node.right_node)
   end
+
+  # Pre-Order Traversal (Current node before children)
+  def pre_order_traversal(node)
+    return [] unless node
+    [ node.value ] + pre_order_traversal(node.left_node) + pre_order_traversal(node.right_node)
+  end
+
+  # Post-Order Traversal (Children before current node)
+  def post_order_traversal(node)
+    return [] unless node
+    pre_order_traversal(node.left_node) + pre_order_traversal(node.right_node) + [ node.value ]
+  end
+
 end
 
-binary_tree = BinaryTree.new
-binary_tree.add_value(123)
-binary_tree.add_value(43)
-puts binary_tree.inspect
-puts binary_tree.in_order_traversal(binary_tree.root).inspect
+tree = BinaryTree.new(13)
+tree.add_value(4)
+tree.add_value(50)
+tree.add_value(5)
 
-
-# In Order Traversal (From least to most)
-
-
-# Pre-Order Traversal (Current node before children)
-
-# Post-Order Travels (Children before current node)
+puts tree.inspect
+puts tree.in_order_traversal(tree.root).inspect
+puts tree.pre_order_traversal(tree.root).inspect
+puts tree.post_order_traversal(tree.root).inspect
