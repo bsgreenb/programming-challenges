@@ -1,3 +1,5 @@
+# Note that stacks and queues are just linked lists with LIFO vs FIFO behavior
+
 # Goal here is to understand Linked Lists, and implement one from scratch in Ruby
 # Adapted from http://wlowry88.github.io/blog/2014/08/20/linked-lists-in-ruby/
 
