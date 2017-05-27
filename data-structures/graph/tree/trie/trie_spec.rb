@@ -19,7 +19,7 @@ RSpec.describe Node do
     end
 
     it 'disallows multiple length chars' do
-      expect { Node.new('_') }.to raise_error
+      expect { Node.new('aa') }.to raise_error
     end
   end
 
@@ -32,18 +32,20 @@ RSpec.describe Node do
     end
 
     context 'next character is there' do
+
       it 'returns get with the rest of the string' do
         node = Node.new
         child = Node.new('A')
-        allow(child).to receive(:get).with('ll').and_return('wegood')
+        allow(child).to receive(:get).with('ll')
         node.children = [ child ]
 
-        expect(node.get('All')).to eq('wegood')
+        node.get('All')
+
         expect(child).to have_received(:get).with('ll')
       end
     end
 
-    context 'terminator is not there' do
+    context 'at end of string, terminator is not there' do
       it 'returns null' do
         node = Node.new
         node.children = [Node.new('J')]
@@ -55,7 +57,7 @@ RSpec.describe Node do
     context 'terminator is there' do
       it 'returns the terminator node' do
         node = Node.new
-        child = Node.new(term: true)
+        child = Node.new('*')
         node.children = [child]
 
         expect(node.get('')).to eq(child)
@@ -63,13 +65,14 @@ RSpec.describe Node do
     end
   end
 
+  #CONTINYA at set
   describe 'set' do
     # This one will be recursive as well.
 
     context 'at end of string, node is already there' do
       it 'does not alter the node' do
           node = Node.new
-          term_node = Node.new(term: true)
+          term_node = Node.new('*')
           node.children = [term_node]
 
           node.set('')
@@ -80,32 +83,35 @@ RSpec.describe Node do
 
     context 'at end of string, node is not there already' do
       it 'adds the term_node' do
-        node = Node.new
+        node = Node.new.set('')
 
-        node.set('')
-        expect(node.children.length).to eq(1)
-        expect(node.children[0].term).to eq(true)
+        expect(node.children).to eq([Node.new('*')])
       end
     end
 
-    context 'next node is already there' do
+    context 'string there already' do
       before do
         @node = Node.new
         child = Node.new('A')
-        @node.children = []
-      end
-
-      it 'runs set on it with the rest of the string' do
+        child.children = [Node.new('*')]
+        @node.children = [child]
 
       end
 
       it 'does not modify its children' do
+        original_node = node.dup
+        @node.set('A')
 
+        expect(@node).to eq(original_node)
       end
     end
 
     context 'next node is not already there' do
-
+      it 'adds the new node to children' do
+        node = Node.new.set('A')
+        expect(node.children[0].char).to eq('A')
+        expect(node.children[0].children[0]).to eq('*')
+      end
     end
   end
 end

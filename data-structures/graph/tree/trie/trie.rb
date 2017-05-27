@@ -1,22 +1,32 @@
 class Node
-  attr_accessor :term, :char, :children
+  attr_accessor :char, :children
 
-  def initialize(char = nil, term: false)
+  TERM_CHAR = '*'
+
+  def initialize(char = nil)
     raise 'Single character only' if char && char.length != 1
+    raise 'Only Term Char (*) and letters allowed' unless char.nil? || /[a-zA-Z\*]/.match(char)
     @char = char
-    @term = term
     @children = []
   end
 
+  # Recursively grabs nodes by char from provided string.
   def get(str)
-    if str == '' # Base case
-      return @children.find(&:term)
+    char = str[0] || TERM_CHAR
+    next_node = find_child(char)
+    return nil if next_node.nil?
+    if str == ''
+      next_node
     else
-      next_node = @children.find{ |child| child.char == str[0] }
-      next_node ? next_node.get(str[1..-1]) : nil
+      next_node.get(str[1..-1])
     end
   end
 
+  def find_child(char)
+    @children.find{ |child| child.char == char }
+  end
+
+  # Recursively sets nodes by char from provided string.
   def set(str)
     if str == ''
       if @children.find(&:term)
