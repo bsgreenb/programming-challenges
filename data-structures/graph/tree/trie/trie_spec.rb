@@ -1,4 +1,5 @@
 require_relative 'trie'
+require 'byebug'
 
 RSpec.describe Node do
   describe 'initialize' do
@@ -83,9 +84,10 @@ RSpec.describe Node do
 
     context 'at end of string, node is not there already' do
       it 'adds the term_node' do
-        node = Node.new.set('')
+        node = Node.new
+        node.set('')
 
-        expect(node.children).to eq([Node.new('*')])
+        expect(node.children[0].char).to eq('*')
       end
     end
 
@@ -99,18 +101,26 @@ RSpec.describe Node do
       end
 
       it 'does not modify its children' do
-        original_node = node.dup
+        original_node = @node.dup
         @node.set('A')
 
-        expect(@node).to eq(original_node)
+        expect(@node.children[0].char).to eq('A')
+        expect(@node.children.length).to eq(1)
+
+        expect(@node.children[0].children[0].char).to eq('*')
+        expect(@node.children[0].children.length).to eq(1)
       end
     end
 
     context 'next node is not already there' do
       it 'adds the new node to children' do
-        node = Node.new.set('A')
+        node = Node.new
+        node.set('A')
         expect(node.children[0].char).to eq('A')
-        expect(node.children[0].children[0]).to eq('*')
+        expect(node.children.length).to eq(1)
+
+        expect(node.children[0].children[0].char).to eq('*')
+        expect(node.children[0].children.length).to eq(1)
       end
     end
   end
@@ -119,48 +129,30 @@ end
 #TODO: make sure we implement 4 part test pattern
 RSpec.describe Trie do
   describe 'initialize' do
-    trie = Trie.new
     it 'initializes null root node' do
-      expect(trie.root.char).to eq(nil)
+      expect(Trie.new.root.char).to eq(nil)
     end
 
     it 'initializes root node with no children' do
-      expect(trie.root.children).to eq([])
+      expect(Trie.new.root.children).to eq([])
     end
   end
 
+  describe 'has_word?' do
+    before do
+      @trie = Trie.new
+      @trie.add_word('hello')
+    end
+    context 'has word' do
+      it 'returns true' do
+        expect(@trie.has_word?('hello')).to eq(true)
+      end
+    end
 
-  #TODO: actually want to define this in terms of what it calls...
-  # Remind myslf of my TDD code flow.. That's what can write clean code on the spot.
-  #TODO: these should be simple calls to root node.
-  # describe 'add_word' do
-  #   trie = Trie.new
-  #   trie.add_word('Chopper')
-  #   # Case sensitive
-  #   node = trie.root
-  #   it 'adds the word' do
-  #     #TODO: reframe with mocks to get()
-  #     'Chopper'.split.each do |char|
-  #       expect(node.children.length).to eq(1)
-  #       expect(node.children[0].).to eq(char)
-  #       expect(node.term).to eq(false)
-  #       node = node.children[0]
-  #     end
-  #     expect(node.term).to eq(true)
-  #   end
-  # end
-
-  # describe 'has_word?' do
-  #   trie = Trie.new
-  #   trie.add_word('Chopper')
-  #   trie.add_word('Car')
-  #
-  #   it 'matches complete words but not partial' do
-  #     expect(trie.has_word?('Chopper')).to eq(true)
-  #     expect(trie.has_word?('Chop')).to eq(false)
-  #
-  #     expect(trie.has_word?('Car')).to eq(true)
-  #     expect(trie.has_word?('C')).to eq(false)
-  #   end
-  # end
+    context 'does not have partial word' do
+      it 'returns false' do
+        expect(@trie.has_word?('hell')).to eq(false)
+      end
+    end
+  end
 end

@@ -1,7 +1,6 @@
+TERM_CHAR = '*'
 class Node
   attr_accessor :char, :children
-
-  TERM_CHAR = '*'
 
   def initialize(char = nil)
     raise 'Single character only' if char && char.length != 1
@@ -12,6 +11,7 @@ class Node
 
   # Recursively grabs nodes by char from provided string.
   def get(str)
+    puts "getting " + str
     char = str[0] || TERM_CHAR
     next_node = find_child(char)
     return nil if next_node.nil?
@@ -28,18 +28,18 @@ class Node
 
   # Recursively sets nodes by char from provided string.
   def set(str)
-    if str == ''
-      if @children.find(&:term)
-        return
-      else
-        @children << Node.new(term: true)
-      end
-    else
-      next_node = @children.find{ |child| child.char == str[0] }
-      unless next_node
-        next_node = @children << Node.new(str[0])
-      end
+    puts "setting " + str
+    char = str[0] || TERM_CHAR
+    next_node = find_child(char)
 
+    unless next_node
+      next_node = Node.new(char)
+      @children << next_node
+    end
+
+    if str == ''
+      return
+    else
       next_node.set(str[1..-1])
     end
   end
@@ -52,8 +52,13 @@ class Trie
     @root = Node.new
   end
 
+  def add_word(word)
+    @root.set(word)
+  end
+
   def has_word?(word)
-    true
+    term_node = @root.get(word)
+    !!(term_node && term_node.char == TERM_CHAR)
   end
 
 end
