@@ -17,17 +17,16 @@ require_relative 'graph'
 #CONTINYA: finishing trie spec
 #CONTINYA: understnading the BFS and DFS and bidirectional pseudocode, and implementing with spec
 
-def depth_first_search
+def depth_first_search(root, search_val = nil)
 
 end
 
 # The key to this algorithm is the use of a queue, rather than recursive call stack
-def breadth_first_search
+def breadth_first_search(root, search_val = nil)
 
 end
 
 # Bidirectional searches
-
-def bidirectional_search
+def bidirectional_search(root, search_val = nil)
 
 end

@@ -6,12 +6,25 @@
 
 class Node
   attr_accessor :value
+  attr_accessor :visited
   attr_accessor :connections
 
   def initilize(val)
     @value = val
     @connections = []
+    @visited = false
   end
+
+  def visit
+    raise 'Already visited' if @visited
+    puts 'Visiting ' + self
+    @visited = true
+  end
+
+  def to_s
+    @value.to_s
+  end
+end
 
 class Graph
   attr_accessor :nodes
