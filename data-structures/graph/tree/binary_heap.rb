@@ -30,7 +30,7 @@ class Node
 
 end
 
-class BinaryTree
+class BinaryHeap
   attr_accessor :root
 
   def initialize(val)

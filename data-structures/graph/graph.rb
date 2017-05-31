@@ -7,17 +7,20 @@
 class Node
   attr_accessor :value
   attr_accessor :visited
+  attr_accessor :marked
   attr_accessor :connections
 
-  def initilize(val)
+  def initialize(val)
     @value = val
     @connections = []
     @visited = false
+    # Use a seperate variable for when we need to explore them prior to 'visiting' in proper order.
+    @marked = false
   end
 
   def visit
-    raise 'Already visited' if @visited
-    puts 'Visiting ' + self
+    raise "Already visited #{to_s}" if @visited
+    puts 'Visiting ' + to_s
     @visited = true
   end
 
