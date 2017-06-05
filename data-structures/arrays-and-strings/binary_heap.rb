@@ -1,13 +1,9 @@
-require_relative 'tree'
-
 # Array implementation has better time complexity but potentially worse space
 # complexity than the linked nodes implementation.  The array implementation
 # is also special and useful to know about.  So we'll implement Binary Heap
 # in that way here.
 
 # We will implement a max heap where values at top are always bigger than ones below.
-
-# Used https://www.sitepoint.com/heap-data-structure-ruby/ as a resource
 
 class Node
   attr_accessor :value
