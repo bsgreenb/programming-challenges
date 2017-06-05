@@ -25,7 +25,6 @@ class BinaryHeap
     @heap_arr = []
   end
 
-
   def left_child(index)
     @heap_arr[2*index]
   end
@@ -36,6 +35,7 @@ class BinaryHeap
 
   def parent(index)
     return nil if index.zero?
+    return @heap_arr[0] if index == 2
     @heap_arr[index/2]
   end
 
