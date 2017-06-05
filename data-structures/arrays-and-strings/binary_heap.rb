@@ -1,3 +1,4 @@
+require 'byebug'
 # Array implementation has better time complexity but potentially worse space
 # complexity than the linked nodes implementation.  The array implementation
 # is also special and useful to know about.  So we'll implement Binary Heap
@@ -29,13 +30,13 @@ class BinaryHeap
     @heap_arr[2*index + 1]
   end
 
-  def parent(index)
+  def parent_index(index)
     return nil if index.zero?
-    return @heap_arr[0] if index == 2
-    @heap_arr[index/2]
+    return 0 if index == 2
+    index/2
   end
 
-  def leaf_node?(index)
+  def leaf_index?(index)
     index >= @heap_arr.length / 2
   end
 
@@ -58,11 +59,18 @@ class BinaryHeap
     offset = @heap_arr.length - 1
 
     loop do
-      parent_node = parent(offset)
+      #CONTINYA here: parent_index is giving nil which is mee
+      # binary_heap.rb:65:in `[]': no implicit conversion from nil to integer (TypeError)
+      parent_index = parent_index(offset)
+      parent_node = @heap_arr[parent_index]
+
       break unless offset > 0 && parent_node.value < element.value
+
+      offset = parent_index
 
       # Swap
       parent_node, @heap_arr[offset] = @heap_arr[offset], parent_node
+
     end
   end
 
@@ -97,5 +105,14 @@ class BinaryHeap
 
       # Switch em
       @heap_arr[offset], larger_child = larger_child, @heap_arr[offset]
+    end
   end
 end
+
+# Testing it..
+bh = BinaryHeap.new
+bh.push(1)
+bh.push(5)
+bh.push(3)
+
+puts bh.heap_arr.inspect
