@@ -55,15 +55,14 @@ class BinaryHeap
 
   # Recursively push an element up from the bottom of the tree as needed
   def bubble_up(element)
-    #TODO: grabbing the parent.. I wanna make sure I do dat right..
     offset = @heap_arr.length - 1
 
     loop do
-      parent = offset / 2
-      break unless offset > 0 && @heap_arr[parent].value < element.value
+      parent_node = parent(offset)
+      break unless offset > 0 && parent_node.value < element.value
 
       # Swap
-      @heap_arr[parent], @heap_arr[offset] = @heap_arr[offset], @heap_arr[parent]
+      parent_node, @heap_arr[offset] = @heap_arr[offset], parent_node
     end
   end
 
