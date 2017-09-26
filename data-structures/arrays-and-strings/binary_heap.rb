@@ -4,7 +4,7 @@ require 'byebug'
 # is also special and useful to know about.  So we'll implement Binary Heap
 # in that way here.
 
-# We will implement a max heap where values at top are always bigger than ones below.
+# We will implement a Max Heap where values at top are always bigger than ones below.
 
 class Node
   attr_accessor :value
@@ -40,14 +40,15 @@ class BinaryHeap
     index >= @heap_arr.length / 2
   end
 
-  # Replace the [0]th element with the last one and bubble it down
   def peek_max
     @heap_arr[0]
   end
+  #TODO: lets build this from scratch with Insert and extract_max_element methods.  I think what was missing prior was setting it to the bottomest/rightest index.
 
   # Push the element and bubble up.  This adds memory and then puts it in the right place.
-  def push(element)
+  def insert(element)
     offset = @heap_arr.length
+
     node = Node.new(element)
     @heap_arr << node
 
@@ -56,25 +57,25 @@ class BinaryHeap
 
   # Recursively push an element up from the bottom of the tree as needed
   def bubble_up(element)
-    offset = @heap_arr.length - 1
+    # 'We "fix" the tree by swappning the new element with its parent, until we
+    # find an appropriate spot for the element'
 
+    offset = @heap_arr.length - 1
     loop do
-      #CONTINYA here: parent_index is giving nil which is mee
-      # binary_heap.rb:65:in `[]': no implicit conversion from nil to integer (TypeError)
       parent_index = parent_index(offset)
+      break if parent_index.nil?
+
       parent_node = @heap_arr[parent_index]
 
-      break unless offset > 0 && parent_node.value < element.value
+      break unless parent_node.value < element.value
 
+      # https://coderwall.com/p/be_1va/swap-two-elements-of-an-array-in-ruby
+      @heap_arr[parent_index], @heap_arr[offset] = @heap_arr[offset], @heap_arr[parent_index]
       offset = parent_index
-
-      # Swap
-      parent_node, @heap_arr[offset] = @heap_arr[offset], parent_node
-
     end
   end
 
-  # Pop the element and bubble down.  We need to do this so that everything aintains its place in memory.
+  # Pop the element and bubble down.  We need to do this so that everything maintains its place in memory.
   def pop_max
     max_value = @heap_arr[0]
 
@@ -109,10 +110,13 @@ class BinaryHeap
   end
 end
 
+#TODO: get this sucka running..
 # Testing it..
 bh = BinaryHeap.new
-bh.push(1)
-bh.push(5)
-bh.push(3)
-
+bh.insert(1)
+bh.insert(3)
+bh.insert(5)
+bh.insert(17)
+bh.insert(4)
 puts bh.heap_arr.inspect
+#TODO: check the extract_max behavior.
