@@ -1,6 +1,6 @@
 # Can be implemented using a linked list where key -> unique ID
 # https://launchschool.com/blog/how-the-hash-works-in-ruby and CTCI as guides
-require_relative 'linked_list'
+require_relative 'linked_list/linked_list'
 
 # The hash data structure derives it’s name from this hashing mechanism. Ruby
 # uses the murmur hash function and then applies the division method with a prime number M, which Ruby determines based on the table size that is needed for storage.

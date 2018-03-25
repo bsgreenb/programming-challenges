@@ -1,4 +1,3 @@
-require 'byebug'
 str = 'abcd'
 
 def permutations(str)

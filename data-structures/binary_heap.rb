@@ -47,8 +47,6 @@ class BinaryHeap
 
   # Push the element and bubble up.  This adds memory and then puts it in the right place.
   def insert(element)
-    offset = @heap_arr.length
-
     node = Node.new(element)
     @heap_arr << node
 
@@ -75,8 +73,14 @@ class BinaryHeap
     end
   end
 
+  #TODO: continue here on pop_max..
   # Pop the element and bubble down.  We need to do this so that everything maintains its place in memory.
   def pop_max
+    #TODO: swap the max element with the last element in the heap.
+    #TODO: then bubble down the element that's at the top on down, swapping it with one of its children until the minheap property is destroyed
+    #When doing the swaps, we swap with the larger element to maintain max-heap ordering.
+    #
+
     max_value = @heap_arr[0]
 
     if @heap_arr.size > 0

@@ -50,6 +50,7 @@ class LinkedList
     @head = Node.new(val, nil)
   end
 
+  # Loop til the end then set next.
   def add(val)
     current = @head
     while current.next
@@ -67,6 +68,7 @@ class LinkedList
       while (current.next && current.next.val != val)
         current = current.next
       end
+      # Skip over it with the pointer
       if current.next
         current.next = current.next.next
       end
@@ -85,8 +87,8 @@ class LinkedList
   end
 end
 
-# ll = LinkedList.new('a')
-# ll.add('b')
-# ll.add('c')
-# ll.delete('b')
-# puts ll.to_a.inspect
+#ll = LinkedList.new('a')
+#ll.add('b')
+#ll.add('c')
+#ll.delete('b')
+#puts ll.to_a.inspect
