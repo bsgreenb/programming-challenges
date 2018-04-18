@@ -3,10 +3,15 @@ require_relative 'graph'
 # Dijkstra's algorithm adapts BFS to let you find single-source shortest paths.
 # Requirement that the edges have positive values.
 
+{0=>{1=>10, 2=>10, 3=>20}, 1=>{0=>10, 4=>20, 2=>20, 3=>10}, 4=>{1=>20, 2=>10, 3=>10}, 2=>{1=>20, 0=>10, 4=>10, 3=>20}, 3=>{1=>10, 2=>20, 0=>20, 4=>10}}
+
+
 def djikstra(graph, start_node, end_node)
   path_weights = {}
   previous_shortest_path = {}
   remaining = graph.nodes
+
+  # Begin by setting weight of start node to 0, others to infinity
   graph.nodes.each do |node|
     if node == start_node
       path_weights[node] = 0
@@ -15,20 +20,21 @@ def djikstra(graph, start_node, end_node)
     end
   end
 
-  # pluck the node in remaining with lowest path weight
+  # pluck the node in remaining with lowest path weight.  this will always be the start node to begin
   while remaining.length > 0
     min_index = nil
-    lowest_score = nil
+    lowest_score = Float::INFINITY
     remaining.each_with_index do |remaining_node, i|
-      if !lowest_score || remaining_node.value < lowest_score
+      if path_weights[remaining_node] < lowest_score
         min_index = i
-        lowest_score = remaining_node.value
+        lowest_score = path_weights[remaining_node]
       end
     end
     node = remaining.delete_at(min_index)
 
     # Update path_weight/previous of neighboring nodes based on shortest path
-    node.connections.each do |neighbor, weight|
+    # Also notice how we consider there may be no connections for the min_node.
+    (node.connections || []).each do |neighbor, weight|
       if path_weights[neighbor] > (path_weights[node] + weight)
         path_weights[neighbor] = path_weights[node] + weight
         previous_shortest_path[neighbor] = node
