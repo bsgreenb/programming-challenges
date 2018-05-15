@@ -3,9 +3,6 @@ require_relative 'graph'
 # Dijkstra's algorithm adapts BFS to let you find single-source shortest paths.
 # Requirement that the edges have positive values.
 
-{0=>{1=>10, 2=>10, 3=>20}, 1=>{0=>10, 4=>20, 2=>20, 3=>10}, 4=>{1=>20, 2=>10, 3=>10}, 2=>{1=>20, 0=>10, 4=>10, 3=>20}, 3=>{1=>10, 2=>20, 0=>20, 4=>10}}
-
-
 def djikstra(graph, start_node, end_node)
   path_weights = {}
   previous_shortest_path = {}
@@ -19,6 +16,8 @@ def djikstra(graph, start_node, end_node)
       path_weights[node] = Float::INFINITY
     end
   end
+
+  #TODO: can stop when we reach destination
 
   # pluck the node in remaining with lowest path weight.  this will always be the start node to begin
   while remaining.length > 0
@@ -50,6 +49,7 @@ def djikstra(graph, start_node, end_node)
     node = previous_shortest_path[node]
   end
 
+  puts path_weights[end_node]
   shortest_path.map{|node| node.value}
 end
 
